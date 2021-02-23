@@ -7,12 +7,7 @@ import (
 	"io/ioutil"
 	"log"
 	"os"
-	"testing"
 )
-
-// func hello() {
-// 	fmt.Println("Hello, World!")
-// }
 
 func readCsvFile(filePath string) [][]string {
 	f, err := os.Open(filePath)
@@ -29,64 +24,53 @@ func readCsvFile(filePath string) [][]string {
 
 	return records
 }
-
-func ReadJSONFileMarshal() {
-
-	// Open our jsonFile
-	jsonFile, err := os.Open("javacpp.json")
-	// if we os.Open returns an error then handle it
-	if err != nil {
-		fmt.Println(err)
-	}
-	fmt.Println("Successfully Opened jacacpp.json")
-	// defer the closing of our jsonFile so that we can parse it later on
-	defer jsonFile.Close()
-
-	byteValue, _ := ioutil.ReadAll(jsonFile)
-
-	var result map[string]interface{}
-	json.Unmarshal([]byte(byteValue), &result)
-
-	fmt.Println(result["payload"])
-
-}
-
-func readJSONToken(fileName string, filter func(map[string]interface{}) bool) []map[string]interface{} {
-	file, _ := os.Open(fileName)
-	defer file.Close()
-
-	decoder := json.NewDecoder(file)
-
-	filteredData := []map[string]interface{}{}
-
-	// Read the array open bracket
-	decoder.Token()
-
-	data := map[string]interface{}{}
-	for decoder.More() {
-		decoder.Decode(&data)
-
-		if filter(data) {
-			filteredData = append(filteredData, data)
+func contains(s []string, str string) bool {
+	for _, v := range s {
+		if v == str {
+			return true
 		}
 	}
 
-	return filteredData
+	return false
 }
 
-func LicensesReadToken(b *testing.B) {
-	for n := 0; n < b.N; n++ {
-		readJSONToken("javacpp.json", func(data map[string]interface{}) bool {
-			return data["licenses"].(string) != "null"
-		})
-	}
+// TO IMPLEMENT THE VALIDATION AGAINST THE MATRIX
+// func LicenseValidation(s []string) {
+// 	for _, license := range s {
+// 	}
+// 	return false
+// }
+
+type valuesIAmInterestedIn struct {
+	Payload struct {
+		FileMetadata []*struct {
+			Licenses *[]string `json:"licenses"`
+		} `json:"fileMetadata"`
+	} `json:"payload"`
 }
 
 func main() {
-	// hello()
-	//ReadJSONFileMarshal()
-	LicensesReadToken(b * testing.B)
-
-	records := readCsvFile("licenses.csv")
-	fmt.Println(records)
+	var s []string
+	var values valuesIAmInterestedIn
+	jsonFile, err := ioutil.ReadFile("javacpp_full.json")
+	if err != nil {
+		fmt.Println(err)
+	} else {
+		err = json.Unmarshal(jsonFile, &values)
+		for _, gl := range values.Payload.FileMetadata {
+			if gl.Licenses != nil {
+				var licenses = *gl.Licenses
+				for _, license := range licenses {
+					if (contains(s, license)) == false {
+						s = append(s, license)
+					}
+				}
+			}
+		}
+	}
+	for _, license := range s {
+		fmt.Printf(license)
+		fmt.Println("")
+	}
+	// LicenseValidation(s)
 }

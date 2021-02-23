@@ -30,16 +30,18 @@ func contains(s []string, str string) bool {
 			return true
 		}
 	}
-
 	return false
 }
 
-// TO IMPLEMENT THE VALIDATION AGAINST THE MATRIX
-// func LicenseValidation(s []string) {
-// 	for _, license := range s {
-// 	}
-// 	return false
-// }
+//Still to implement the logic Licenses Array against ComplianceMatrix
+func LicenseValidation(s []string) {
+	fmt.Println("####################################")
+	fmt.Println("# From LicenseValidation function: #")
+	fmt.Println("####################################")
+	for _, license := range s {
+		fmt.Println(license)
+	}
+}
 
 type valuesIAmInterestedIn struct {
 	Payload struct {
@@ -49,10 +51,10 @@ type valuesIAmInterestedIn struct {
 	} `json:"payload"`
 }
 
-func main() {
+func LicensesExtractor(jsonFileName string) []string {
 	var s []string
 	var values valuesIAmInterestedIn
-	jsonFile, err := ioutil.ReadFile("javacpp_full.json")
+	jsonFile, err := ioutil.ReadFile(jsonFileName)
 	if err != nil {
 		fmt.Println(err)
 	} else {
@@ -68,9 +70,11 @@ func main() {
 			}
 		}
 	}
-	for _, license := range s {
-		fmt.Printf(license)
-		fmt.Println("")
-	}
-	// LicenseValidation(s)
+	return s
+}
+
+func main() {
+	var jsonFileName = "javacpp_full.json"
+	var s []string = LicensesExtractor(jsonFileName)
+	LicenseValidation(s)
 }

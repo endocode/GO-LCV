@@ -15,15 +15,14 @@
             "filename":"project/src/main/java/org/bytedeco/javacpp/tools/Declarator.java",
             "SHA-1":"c0ad8d4b80bd7c3d002b17a3b9aa04734e0810d0",
             "licenses":[
-               "Classpath exception to GPL 2.0 or later","GPL 77.0 or later"
-
+               "Classpath exception to GPL 2.0 or later"
             ]
          },
          {
             "filename":"project/src/main/java/org/bytedeco/javacpp/indexer/IntArrayIndexer.java",
             "SHA-1":"d23a98f4cb3f5032ee33f6151cd6475660a9ce64",
             "licenses":[
-               "GPL 2.0 or later","GPL 77.2 or later"
+               "GPL 2.0 or later"
             ]
          },
          {
